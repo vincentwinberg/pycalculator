@@ -18,21 +18,21 @@ class MainGUI():
 
         ''' Row 2 '''
         self.reset_btn = Button(master, text="AC", width=5, height=2, command=lambda: self.clear_window())
-        self.pm_btn = Button(master, text="+/-", width=5, height=2)
-        self.percent_btn = Button(master, text="%", width=5, height=2)
-        self.div_btn = Button(master, text="/", width=5, height=2, command=lambda: self.division())
+        self.percent_btn = Button(master, text="%", width=5, height=2, command=lambda: self.percent())
+        self.back_btn = Button(master, text="⬅︎", width=5, height=2, command=lambda: self.back())
+        self.div_btn = Button(master, text="÷", width=5, height=2, command=lambda: self.division())
 
         ''' Row 3 '''
         self.seven = Button(master, text="7", width=5, height=2, command=lambda: self.btn_press(7))
         self.eight = Button(master, text="8", width=5, height=2, command=lambda: self.btn_press(8))
         self.nine = Button(master, text="9", width=5, height=2, command=lambda: self.btn_press(9))
-        self.mult_btn = Button(master, text="*", width=5, height=2, command=lambda: self.multiplication())
+        self.mult_btn = Button(master, text="×", width=5, height=2, command=lambda: self.multiplication())
 
         ''' Row 4 '''
         self.four = Button(master, text="4", width=5, height=2, command=lambda: self.btn_press(4))
         self.five = Button(master, text="5", width=5, height=2, command=lambda: self.btn_press(5))
         self.six = Button(master, text="6", width=5, height=2, command=lambda: self.btn_press(6))
-        self.sub_btn = Button(master, text="-", width= 5, height=2, command=lambda: self.subtraction())
+        self.sub_btn = Button(master, text="−", width= 5, height=2, command=lambda: self.subtraction())
 
         ''' Row 5 '''
         self.one = Button(master, text="1", width=5, height=2, command=lambda: self.btn_press(1))
@@ -41,15 +41,15 @@ class MainGUI():
         self.add_btn = Button(master, text="+", width=5, height=2, command=lambda: self.addition())
 
         ''' Row 6 '''
-        self.zero = Button(master, text="0", width=11, height=2)
-        self.dec_btn = Button(master, text=",", width=5, height=2)
+        self.zero = Button(master, text="0", width=11, height=2, command=lambda: self.btn_press(0))
+        self.dec_btn = Button(master, text=".", width=5, height=2, command=lambda: self.comma())
         self.eq_btn = Button(master, text="=", width=5, height=2, command=lambda: self.eq_func())
 
-        # Aligns with grid
+        # Aligns using grid
         self.lb1.grid(row=0, column=0, columnspan=4)
         self.reset_btn.grid(row=1, column=0)
-        self.pm_btn.grid(row=1, column=1)
-        self.percent_btn.grid(row=1, column=2)
+        self.percent_btn.grid(row=1, column=1)
+        self.back_btn.grid(row=1, column=2)
         self.div_btn.grid(row=1, column=3)
         self.seven.grid(row=2, column=0)
         self.eight.grid(row=2, column=1)
@@ -86,6 +86,12 @@ class MainGUI():
             self.curr_op = "add"
             self.lb1["text"] = ""
 
+    def back(self):
+        if len(self.lb1["text"]) == 0:
+            return False
+        else:
+            self.lb1["text"] = self.lb1["text"][:- 1]
+
     def subtraction(self):
         if len(self.lb1["text"]) == 0:
             return False
@@ -105,9 +111,6 @@ class MainGUI():
     def division(self):
         if len(self.lb1["text"]) == 0:
             return False
-        elif float(self.lb1["text"]) == 0:
-            print("Du kan inte dividera med noll!")
-            return False
         else:
             self.saved_val = float(self.lb1["text"])
             self.curr_op = "div"
@@ -126,9 +129,22 @@ class MainGUI():
             self.result = self.saved_val * self.curr_val
 
         if self.curr_op == "div":
-            self.result = self.saved_val / self.curr_val
+            if float(self.lb1["text"]) == 0:
+                self.lb1["text"] = "Error, can't divide by zero"
+                return False
+            else:
+                self.result = self.saved_val / self.curr_val
 
         self.lb1["text"] = str(self.result)
+
+    def comma(self):
+        if len(self.lb1["text"]) == 0:
+            return False
+        else:
+            self.lb1["text"] += "."
+
+    def percent(self):
+        self.lb1["text"] = "{}%".format(float(self.lb1["text"])*100)
 
 
 # Runs tkinter
