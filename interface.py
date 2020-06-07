@@ -121,14 +121,11 @@ class MainGUI():
 
         if self.curr_op == "add":
             self.result = self.saved_val + self.curr_val
-
-        if self.curr_op == "sub":
+        elif self.curr_op == "sub":
             self.result = self.saved_val - self.curr_val
-
-        if self.curr_op == "mult":
+        elif self.curr_op == "mult":
             self.result = self.saved_val * self.curr_val
-
-        if self.curr_op == "div":
+        elif self.curr_op == "div":
             if float(self.lb1["text"]) == 0:
                 self.lb1["text"] = "Error, can't divide by zero"
                 return False
